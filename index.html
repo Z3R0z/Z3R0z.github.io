@@ -742,14 +742,25 @@
   }
 
   // Email obfuscation: address never appears in source.
-  // Stored reversed + split; assembled only when a human clicks.
+  // On click: try the mail client, but also copy + reveal the address,
+  // since mailto: silently fails when no mail app is configured.
   (function() {
     const p = ['moc.liamg', '531omnahtanoj'];
     const addr = () => p[1].split('').reverse().join('') + String.fromCharCode(64) + p[0].split('').reverse().join('');
     document.querySelectorAll('[data-eml]').forEach(el => {
+      const original = el.textContent;
       el.addEventListener('click', e => {
         e.preventDefault();
-        location.href = 'mai' + 'lto:' + addr();
+        const a = addr();
+        if (navigator.clipboard) navigator.clipboard.writeText(a).catch(() => {});
+        el.textContent = a + ' — copied!';
+        setTimeout(() => { el.textContent = original; }, 4000);
+        // attempt the mail client without navigating the page away
+        const f = document.createElement('iframe');
+        f.style.display = 'none';
+        f.src = 'mai' + 'lto:' + a;
+        document.body.appendChild(f);
+        setTimeout(() => f.remove(), 1000);
       });
     });
   })();
