@@ -339,6 +339,15 @@
     gap: 8px;
     margin-top: 12px;
   }
+  .shot {
+    grid-column: 1 / -1;
+    width: 100%;
+    display: block;
+    margin-top: 12px;
+  }
+  @media (max-width: 720px) {
+    .shot { margin-top: 4px; }
+  }
   .tag {
     font-size: var(--text-caption);
     color: var(--color-ash);
@@ -520,6 +529,7 @@
             <span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">WebSockets</span><span class="tag">Bot AI</span><span class="tag">Railway / Render</span>
           </div>
         </div>
+        <img class="shot" src="assets/secret-hitler.png" alt="Secret Hitler Online game mat — dark theme, policy board, player role cards, live game log, and bot players chatting" loading="lazy" width="1600" height="950">
       </article>
 
       <article class="project">
@@ -554,11 +564,12 @@
           <p class="meta">Hardware · 3D printing · <a href="https://pir-detection.onrender.com" style="text-decoration: underline;">Live dashboard</a> · <a href="https://github.com/Z3R0z/PIR-detection" style="text-decoration: underline;">GitHub</a></p>
         </div>
         <div>
-          <p>ESP32 + PIR motion detector with a passive buzzer, in a custom 3D-printed enclosure. Iterated through a screwless sliding lid, a cradle with header clearance, and an enlarged lens opening — printed in glow-in-the-dark PETG on an Ender-3 V3 SE.</p>
+          <p>ESP32 + PIR motion detector with a passive buzzer that also reports to a web dashboard — the board POSTs alerts to an Express server (API-key auth) which streams them live to the browser over SSE. Housed in a custom 3D-printed enclosure, iterated through a screwless sliding lid and cradle with header clearance, printed in glow-in-the-dark PETG on an Ender-3 V3 SE.</p>
           <div class="tags">
             <span class="tag">ESP32</span><span class="tag">C / ESP-IDF</span><span class="tag">CAD</span><span class="tag">PETG</span>
           </div>
         </div>
+        <img class="shot" src="assets/pir-dashboard.png" alt="PIR Motion Alerts web dashboard — live feed of motion-detected events streamed from the ESP32 with timestamps" loading="lazy" width="1600" height="460">
       </article>
 
       <article class="project">
