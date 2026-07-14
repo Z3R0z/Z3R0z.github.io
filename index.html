@@ -339,14 +339,37 @@
     gap: 8px;
     margin-top: 12px;
   }
-  .shot {
-    grid-column: 1 / -1;
-    width: 100%;
-    display: block;
-    margin-top: 12px;
+  /* Hover preview + lightbox for project screenshots */
+  .preview-pop {
+    position: fixed;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    width: 440px;
+    max-width: 42vw;
+    border: 1px solid #2a2622;
+    background: var(--color-graphite);
   }
-  @media (max-width: 720px) {
-    .shot { margin-top: 4px; }
+  .preview-pop.show { opacity: 1; transform: none; }
+  .preview-pop img { width: 100%; display: block; }
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(15, 13, 10, 0.94);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: min(1100px, 94vw);
+    max-height: 88vh;
+    border: 1px solid #2a2622;
   }
   .tag {
     font-size: var(--text-caption);
@@ -521,7 +544,7 @@
       <article class="project">
         <div>
           <h3>Secret Hitler Online</h3>
-          <p class="meta">Web · Real-time multiplayer · <a href="https://secret-hitler-29ok.onrender.com/" style="text-decoration: underline;">Play it live</a> · <a href="https://github.com/Z3R0z/secret-hitler" style="text-decoration: underline;">GitHub</a></p>
+          <p class="meta">Web · Real-time multiplayer · <a href="#" class="preview-link" data-img="assets/secret-hitler.png" data-alt="Secret Hitler Online game mat — dark theme, policy board, role cards, live log, bots chatting" style="text-decoration: underline;">Preview</a> · <a href="https://secret-hitler-29ok.onrender.com/" style="text-decoration: underline;">Play it live</a> · <a href="https://github.com/Z3R0z/secret-hitler" style="text-decoration: underline;">GitHub</a></p>
         </div>
         <div>
           <p>A web implementation of <em>Secret Hitler</em>, the social-deduction party game — real-time multiplayer over WebSockets with hidden-role assignment, voting, executive powers, and full win-condition logic. Includes role-aware AI bots that vote, legislate, bluff, and chat; live chat with 7TV emote support; auto-reconnection; and a draggable, resizable game-mat UI. Deploys to Railway or Render.</p>
@@ -529,7 +552,6 @@
             <span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">WebSockets</span><span class="tag">Bot AI</span><span class="tag">Railway / Render</span>
           </div>
         </div>
-        <img class="shot" src="assets/secret-hitler.png" alt="Secret Hitler Online game mat — dark theme, policy board, player role cards, live game log, and bot players chatting" loading="lazy" width="1600" height="950">
       </article>
 
       <article class="project">
@@ -561,7 +583,7 @@
       <article class="project">
         <div>
           <h3>Motion Sentinel</h3>
-          <p class="meta">Hardware · 3D printing · <a href="https://pir-detection.onrender.com" style="text-decoration: underline;">Live dashboard</a> · <a href="https://github.com/Z3R0z/PIR-detection" style="text-decoration: underline;">GitHub</a></p>
+          <p class="meta">Hardware · 3D printing · <a href="#" class="preview-link" data-img="assets/pir-dashboard.png" data-alt="PIR Motion Alerts dashboard — live motion events streamed from the ESP32 with timestamps" style="text-decoration: underline;">Preview</a> · <a href="https://pir-detection.onrender.com" style="text-decoration: underline;">Live dashboard</a> · <a href="https://github.com/Z3R0z/PIR-detection" style="text-decoration: underline;">GitHub</a></p>
         </div>
         <div>
           <p>ESP32 + PIR motion detector with a passive buzzer that also reports to a web dashboard — the board POSTs alerts to an Express server (API-key auth) which streams them live to the browser over SSE. Housed in a custom 3D-printed enclosure, iterated through a screwless sliding lid and cradle with header clearance, printed in glow-in-the-dark PETG on an Ender-3 V3 SE.</p>
@@ -569,7 +591,6 @@
             <span class="tag">ESP32</span><span class="tag">C / ESP-IDF</span><span class="tag">CAD</span><span class="tag">PETG</span>
           </div>
         </div>
-        <img class="shot" src="assets/pir-dashboard.png" alt="PIR Motion Alerts web dashboard — live feed of motion-detected events streamed from the ESP32 with timestamps" loading="lazy" width="1600" height="460">
       </article>
 
       <article class="project">
@@ -672,6 +693,9 @@
   </footer>
 </div>
 
+<div class="preview-pop" aria-hidden="true"><img alt=""></div>
+<div class="lightbox" role="dialog" aria-label="Screenshot preview"><img alt=""></div>
+
 <script>
   document.documentElement.classList.add('js');
 
@@ -751,6 +775,40 @@
     lines.forEach(l => l.style.visibility = 'hidden');
     lines.forEach((l, i) => setTimeout(() => { l.style.visibility = 'visible'; }, 1100 + i * 360));
   }
+
+  // Screenshot previews: hover for floating thumbnail, click for lightbox
+  (function() {
+    const pop = document.querySelector('.preview-pop'), popImg = pop.querySelector('img');
+    const lb = document.querySelector('.lightbox'), lbImg = lb.querySelector('img');
+    const canHover = matchMedia('(hover: hover)').matches;
+    document.querySelectorAll('.preview-link').forEach(a => {
+      if (canHover) {
+        a.addEventListener('mouseenter', () => {
+          popImg.src = a.dataset.img;
+          popImg.alt = a.dataset.alt || '';
+          pop.classList.add('show');
+        });
+        a.addEventListener('mouseleave', () => pop.classList.remove('show'));
+        a.addEventListener('mousemove', e => {
+          const w = pop.offsetWidth, h = pop.offsetHeight;
+          let x = e.clientX + 20, y = e.clientY - h - 16;
+          if (x + w > innerWidth - 12) x = e.clientX - w - 20;
+          if (y < 12) y = e.clientY + 20;
+          pop.style.left = x + 'px';
+          pop.style.top = y + 'px';
+        });
+      }
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        pop.classList.remove('show');
+        lbImg.src = a.dataset.img;
+        lbImg.alt = a.dataset.alt || '';
+        lb.classList.add('open');
+      });
+    });
+    lb.addEventListener('click', () => lb.classList.remove('open'));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+  })();
 
   // Email obfuscation: address never appears in source.
   // On click: try the mail client, but also copy + reveal the address,
