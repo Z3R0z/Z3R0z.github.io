@@ -336,7 +336,32 @@
     padding: var(--card-padding) 0;
     border-top: 1px solid #2a2622;
     position: relative;
+    transition: background 0.2s ease;
   }
+  .project::before {
+    content: "";
+    position: absolute;
+    left: 0; top: -1px; bottom: 0;
+    width: 2px;
+    background: var(--color-ember);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .project:hover::before { opacity: 1; }
+  .project:hover { background: rgba(255,71,0,0.02); }
+  .project-thumb {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    border: 1px solid #2d333b;
+    border-radius: 8px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: top;
+    background: #101216;
+    transition: border-color 0.2s ease;
+  }
+  .project:hover .project-thumb { border-color: #3a4048; }
   .project::before {
     content: '';
     position: absolute;
@@ -577,6 +602,7 @@
         <div>
           <h3>Secret Hitler Online</h3>
           <p class="meta">Web · Real-time multiplayer</p>
+          <img class="project-thumb" src="assets/secret-hitler.png" alt="Secret Hitler Online game mat with policy board, role cards, and live log" loading="lazy">
         </div>
         <div>
           <p>A web implementation of <em>Secret Hitler</em>, the social-deduction party game — real-time multiplayer over WebSockets with hidden-role assignment, voting, executive powers, and full win-condition logic. Includes role-aware AI bots that vote, legislate, bluff, and chat; live chat with 7TV emote support; auto-reconnection; and a draggable, resizable game-mat UI. Deploys to Railway or Render.</p>
@@ -608,6 +634,7 @@
         <div>
           <h3>Market Pulse</h3>
           <p class="meta">Web · Full stack</p>
+          <img class="project-thumb" src="assets/marketpulse-thumb.png" alt="Market Pulse fan chart projecting bear, base, and bull S&P 500 scenarios" loading="lazy">
         </div>
         <div>
           <p>A stock analysis site with a Node/Express backend proxying Yahoo Finance and a hand-rolled SVG fan chart projecting bear, base, and bull scenarios. Deployed on Render as a live web service.</p>
@@ -624,6 +651,7 @@
         <div>
           <h3>Motion Sentinel</h3>
           <p class="meta">Hardware · 3D printing</p>
+          <img class="project-thumb" src="assets/pir-dashboard.png" alt="PIR motion alert dashboard streaming live events from the ESP32" loading="lazy">
         </div>
         <div>
           <p>ESP32 + PIR motion detector with a passive buzzer that also reports to a web dashboard — the board POSTs alerts to an Express server (API-key auth) which streams them live to the browser over SSE. Housed in a custom 3D-printed enclosure, iterated through a screwless sliding lid and cradle with header clearance, printed in glow-in-the-dark PETG on an Ender-3 V3 SE.</p>
