@@ -620,10 +620,13 @@
           <div class="tags">
             <span class="tag">CAD</span><span class="tag">Aluminum extrusion</span><span class="tag">Load cell</span><span class="tag">DAQ</span>
           </div>
-          <video controls preload="none" poster="assets/teststand-poster.jpg"
-                 style="width:100%; margin-top:14px; border:1px solid #2d333b; border-radius:8px; background:#101216; display:block;">
-            <source src="assets/teststand.mp4" type="video/mp4">
-          </video>
+          <p class="meta" style="margin-top:12px;"><a href="#" id="ts-toggle" style="text-decoration: underline;">Demo video ▾</a></p>
+          <div id="ts-panel" style="display:block; margin-top:8px; overflow:hidden;">
+            <video id="ts-video" controls preload="none" poster="assets/teststand-poster.jpg"
+                   style="width:100%; border:1px solid #2d333b; border-radius:8px; background:#101216; display:block;">
+              <source src="assets/teststand.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </article>
 
@@ -869,6 +872,19 @@
       p.style.display = 'block'; t.textContent = 'Exploded view (3D) ▾';
       p.scrollIntoView({behavior:'smooth', block:'nearest'});
     }
+  });
+})();
+(function(){
+  var t = document.getElementById('ts-toggle'),
+      p = document.getElementById('ts-panel'),
+      v = document.getElementById('ts-video');
+  if (!t || !p) return;
+  t.addEventListener('click', function(e){
+    e.preventDefault();
+    var open = p.style.display !== 'none';
+    if (open) { if (v) v.pause(); p.style.display = 'none'; t.textContent = 'Demo video ▸'; }
+    else { p.style.display = 'block'; t.textContent = 'Demo video ▾';
+           p.scrollIntoView({behavior:'smooth', block:'nearest'}); }
   });
 })();
 </script>
