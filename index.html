@@ -583,12 +583,16 @@
       <article class="project">
         <div>
           <h3>Motion Sentinel</h3>
-          <p class="meta">Hardware · 3D printing · <a href="#" class="preview-link" data-img="assets/pir-dashboard.png" data-alt="PIR Motion Alerts dashboard — live motion events streamed from the ESP32 with timestamps" style="text-decoration: underline;">Preview</a> · <a href="viewers/motion-sentinel.html" target="_blank" rel="noopener" style="text-decoration: underline;">Exploded view (3D)</a> · <a href="https://pir-detection.onrender.com" style="text-decoration: underline;">Live dashboard</a> · <a href="https://github.com/Z3R0z/PIR-detection" style="text-decoration: underline;">GitHub</a></p>
+          <p class="meta">Hardware · 3D printing · <a href="#" class="preview-link" data-img="assets/pir-dashboard.png" data-alt="PIR Motion Alerts dashboard — live motion events streamed from the ESP32 with timestamps" style="text-decoration: underline;">Preview</a> · <a href="#" id="ms3d-toggle" style="text-decoration: underline;">Exploded view (3D) ▸</a> · <a href="https://pir-detection.onrender.com" style="text-decoration: underline;">Live dashboard</a> · <a href="https://github.com/Z3R0z/PIR-detection" style="text-decoration: underline;">GitHub</a></p>
         </div>
         <div>
           <p>ESP32 + PIR motion detector with a passive buzzer that also reports to a web dashboard — the board POSTs alerts to an Express server (API-key auth) which streams them live to the browser over SSE. Housed in a custom 3D-printed enclosure, iterated through a screwless sliding lid and cradle with header clearance, printed in glow-in-the-dark PETG on an Ender-3 V3 SE.</p>
           <div class="tags">
             <span class="tag">ESP32</span><span class="tag">C / ESP-IDF</span><span class="tag">CAD</span><span class="tag">PETG</span>
+          </div>
+          <div id="ms3d-panel" style="display:none; margin-top:14px; overflow:hidden;">
+            <iframe id="ms3d-frame" data-src="viewers/motion-sentinel.html" title="Motion Sentinel — interactive exploded view"
+                    style="width:100%; height:460px; border:1px solid #2d333b; border-radius:8px; background:#101216; display:block;"></iframe>
           </div>
         </div>
       </article>
@@ -833,6 +837,24 @@
       });
     });
   })();
+</script>
+<script>
+(function(){
+  var t = document.getElementById('ms3d-toggle'),
+      p = document.getElementById('ms3d-panel'),
+      f = document.getElementById('ms3d-frame');
+  if (!t || !p || !f) return;
+  t.addEventListener('click', function(e){
+    e.preventDefault();
+    var open = p.style.display !== 'none';
+    if (open) { p.style.display = 'none'; t.textContent = 'Exploded view (3D) ▸'; }
+    else {
+      if (!f.src) f.src = f.dataset.src;   // lazy-load 3D viewer on first open
+      p.style.display = 'block'; t.textContent = 'Exploded view (3D) ▾';
+      p.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+  });
+})();
 </script>
 </body>
 </html>
