@@ -642,9 +642,9 @@
           <img class="project-thumb" src="assets/marketpulse-thumb.png" alt="Market Pulse fan chart projecting bear, base, and bull S&P 500 scenarios" loading="lazy">
         </div>
         <div>
-          <p>A stock analysis site with a Node/Express backend proxying Yahoo Finance and a hand-rolled SVG fan chart projecting bear, base, and bull scenarios. Deployed on Render as a live web service.</p>
+          <p>A live market dashboard with a Node/Express backend that relays Yahoo Finance data server-side (no exposed keys) and runs a Monte Carlo engine — geometric Brownian motion, 1,000 simulated paths with drift and volatility fitted to a year of daily returns. The SVG fan chart draws the resulting 10th/50th/90th percentile bands, falling back to an illustrative view if the API is cold. Deployed on Render.</p>
           <div class="tags">
-            <span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">SVG</span><span class="tag">Render</span>
+            <span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">Monte Carlo</span><span class="tag">SVG</span><span class="tag">Render</span>
           </div>
           <div class="proj-links">
             <a class="proj-link primary" href="https://market-analyzer-rpcg.onrender.com" target="_blank" rel="noopener">↗ Live site</a>
